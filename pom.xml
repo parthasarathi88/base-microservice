@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.1</version>
+		<version>3.2.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.cs</groupId>
@@ -27,14 +27,15 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>21</java.version>
-		<spring-cloud.version>2024.0.0</spring-cloud.version>
+		<java.version>11</java.version>
+		<spring-cloud.version>2023.0.0</spring-cloud.version>
+		<jib-maven-plugin.version>3.4.4</jib-maven-plugin.version>
 	</properties>
 	<dependencies>
-	<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-aop</artifactId>
-</dependency>
+		<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bootstrap</artifactId>
@@ -81,6 +82,56 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<from>
+						<image>openjdk:17-slim</image>
+						<!-- <auth>
+						<username>none</username>
+						<password>auth-token</password>
+						</auth> -->
+					</from>
+					<to>
+						<image>sahureb/k8s-base-microservice:latest</image>
+						<!-- <auth>
+						<username>username</username>
+						<password>password/token</password>
+						</auth> -->
+					</to>
+					<extraDirectories>
+						<paths>
+							<path>
+								<from>target/</from>
+								<into>/deployment</into>
+								<includes>*.jar</includes>
+							</path>
+							<path>
+								<from>startup/</from>
+								<into>/deployment</into>
+								<includes>start.sh</includes>
+							</path>
+						</paths>
+					</extraDirectories>
+					<container>
+						<jvmFlags>
+							<jvmFlag>-Xms512m</jvmFlag>
+							<jvmFlag>-Xmx1024m</jvmFlag>
+							<jvmFlag>-Dspring.profiles.active=prod</jvmFlag>
+						</jvmFlags>
+						<ports>
+							<port>8080</port>
+							<port>8443</port>
+						</ports>
+						<workingDirectory>/deployment</workingDirectory>
+						<!-- <entrypoint>
+							<shell> chmod 755 /deployment/start.sh </shell>
+						</entrypoint> -->
+					</container>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
