@@ -96,7 +96,7 @@
 						</auth> -->
 					</from>
 					<to>
-						<image>sahureb/k8s-base-microservice:latest</image>
+						<image>parthatutu1988/k8s-base-microservice:latest</image>
 						<!-- <auth>
 						<username>username</username>
 						<password>password/token</password>
