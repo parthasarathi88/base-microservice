@@ -1,0 +1,22 @@
+name: Validate Maven Wrapper
+on:
+  push:
+  pull_request:
+
+jobs:
+  validation:
+    name: "Maven Wrapper Validation"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Validate Maven wrapper
+        run: |
+          if [ -f "./mvnw" ]; then
+            echo "Maven wrapper found and validated"
+            chmod +x ./mvnw
+            ./mvnw --version
+          else
+            echo "Maven wrapper not found!"
+            exit 1
+          fi
